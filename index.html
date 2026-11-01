@@ -1,34 +1,111 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NEXORA | Discover. Mint. Own.</title>
+<title>NEXORA | Every Mint Is A New Possibility</title>
+<meta name="description" content="NEXORA — 6,666 NFT gacha on BNB Smart Chain. Every mint is a draw from a published, verifiable deck.">
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
 <style>
-body{margin:0;background:#0b0f1a;color:#eef2ff;font-family:system-ui,Arial,sans-serif}
-.wrap{max-width:900px;margin:0 auto;padding:32px 20px 60px}
-h1{font-size:42px;margin:8px 0} .tag{color:#7dd3fc;letter-spacing:.12em;text-transform:uppercase;font-size:13px}
-.card{background:#111827;border:1px solid #1f2937;border-radius:16px;padding:20px;margin:16px 0}
-.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.stat div{background:#0b0f1a;border:1px solid #1f2937;border-radius:12px;padding:14px;text-align:center}
-.stat b{font-size:22px;display:block}
-table{width:100%;border-collapse:collapse} td,th{padding:8px;border-bottom:1px solid #1f2937;text-align:left}
-a{color:#7dd3fc} .btn{display:inline-block;background:#38bdf8;color:#082f49;padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:700}
-.muted{color:#94a3b8}
+:root{--purple:#a855f7;--neon:#c084fc;--gold:#facc15;--bg:#050508}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(1000px 500px at 20% -10%,#4c1d95 0,transparent 60%),radial-gradient(900px 500px at 90% 10%,#854d0e 0,transparent 55%),var(--bg);color:#f8fafc;font-family:system-ui,-apple-system,Arial,sans-serif}
+a{color:#c084fc} .wrap{max-width:1080px;margin:0 auto;padding:24px 20px 70px}
+nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.logo{font-weight:900;letter-spacing:.25em;font-size:22px} .logo span{color:var(--gold)}
+.btn{display:inline-block;background:linear-gradient(90deg,#9333ea,#facc15);color:#111;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:800;border:0;cursor:pointer}
+.btn2{border:1px solid #a855f7;background:transparent;color:#fff;padding:11px 20px;border-radius:999px;cursor:pointer;font-weight:700;text-decoration:none}
+.hero{text-align:center;padding:60px 10px 30px} .hero h1{font-size:clamp(32px,6vw,64px);line-height:1.05;margin:12px 0}
+.hero h1 em{font-style:normal;color:var(--neon)} .hero h1 b{color:var(--gold)}
+.glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:22px;margin:22px 0;backdrop-filter:blur(10px)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px} .stats div{background:rgba(0,0,0,.35);border-radius:14px;padding:16px;text-align:center} .stats b{font-size:26px;display:block}
+.box{width:150px;height:150px;margin:18px auto;position:relative;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotateY(0)}50%{transform:translateY(-12px) rotateY(20deg)}}
+.box .face{position:absolute;inset:0;background:linear-gradient(135deg,#9333ea,#facc15);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:64px;box-shadow:0 20px 50px rgba(168,85,247,.45)}
+.box.open .face{transform:rotateX(-70deg);transform-origin:top;transition:transform .8s}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.card{border-radius:16px;padding:16px;text-align:center;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05)}
+.card .art{font-size:52px;height:90px;display:flex;align-items:center;justify-content:center}
+.tier-Common{border-color:#94a3b8}.tier-Uncommon{border-color:#22c55e}.tier-Rare{border-color:#38bdf8}.tier-Epic{border-color:#a855f7}.tier-Legendary{border-color:#facc15}.tier-Mythic{border-color:#f97316}
+table{width:100%;border-collapse:collapse} td,th{padding:9px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left}
+input,select{background:#111827;color:#fff;border:1px solid #374151;border-radius:10px;padding:10px}
+.muted{color:#94a3b8} .warn{color:#facc15}
+#txlog{white-space:pre-wrap;word-break:break-all;background:#000;border-radius:12px;padding:14px;min-height:60px}
+footer{margin-top:40px;border-top:1px solid rgba(255,255,255,.15);padding-top:18px;display:flex;flex-wrap:wrap;gap:18px}
+@media(max-width:600px){.stats{grid-template-columns:1fr}}
 </style></head><body><div class="wrap">
-<p class="tag">Limited collection on BNB Chain</p>
-<h1>Discover. Mint. Own.</h1>
-<p>NEXORA is a collection of <b>1,111</b> handcrafted NFTs. Every piece carries a published rarity, a verifiable edition, and utility that stays with the holder.</p>
-<div class="card stat"><div><b>1,111</b>Total supply</div><div><b>555 · 0.0001 BNB</b>Free mint (phase 1)</div><div><b>556 · 0.001 BNB</b>Paid mint (phase 2)</div></div>
-<div class="card"><h2>Mint status: COMING SOON</h2>
-<p class="muted">Contract: not deployed yet. The smart contract (<code>Nexora.sol</code>) is drafted and compiled; it will be published here once deployed on BNB Chain (56). Mint opens after deployment.</p>
-<p>Network: BNB Chain · Max 10 per wallet (draft) · Sequential token IDs 1–1,111</p></div>
-<div class="card"><h2>Rarity, published in full</h2>
-<table><tr><th>Tier</th><th>Count</th><th>Utility</th></tr>
-<tr><td>Common</td><td>555 (50%)</td><td>Holder-only community channel, roadmap updates before public release</td></tr>
-<tr><td>Uncommon</td><td>278 (25%)</td><td>Priority allowlist for the next NEXORA drop</td></tr>
-<tr><td>Rare</td><td>167 (15%)</td><td>Everything in Uncommon, vote in community polls</td></tr>
-<tr><td>Epic</td><td>78 (7%)</td><td>Everything in Rare, 24-hour early access to future mints</td></tr>
-<tr><td>Legendary</td><td>22 (2%)</td><td>Numbered edition plate (#001/022), lifetime allowlist, exclusive animated artwork</td></tr>
-<tr><td>Mythic</td><td>11 (1%)</td><td>Everything in Legendary, founder seat in the NEXORA council, named credit in the collection archive</td></tr></table>
-<p class="muted">Rarity is assigned from a seeded shuffle. Anyone can reproduce the allocation and check the totals. Rarity is a metadata trait, not enforced by the mint function.</p></div>
-<div class="card"><h2>Original site</h2><p>The Bolt preview this page is based on: <a href="https://nexora-nft-minting-p-pmbp.bolt.host">nexora-nft-minting-p-pmbp.bolt.host</a></p>
-<p class="muted">Source: workspace/nexora/contract/Nexora.sol · Repo: encangmulyana-lang/Nexora</p></div>
-</div></body></html>
+<nav><div class="logo">NEX<span>ORA</span></div><div><button class="btn2" id="connectBtn" onclick="connectWallet()">Connect Wallet</button> <a class="btn2" href="admin.html">Admin</a></div></nav>
+<div id="walletInfo" class="muted"></div>
+<section class="hero">
+<p style="letter-spacing:.2em;color:#c084fc">BNB SMART CHAIN • ERC-721 • 6,666 SUPPLY</p>
+<h1>EVERY MINT IS A <em>NEW</em> <b>POSSIBILITY.</b></h1>
+<p>Enter the world of digital collectibles on BNB Chain. Every mint draws the next token from a published, verifiable deck — no admin can change the rarity after deploy.</p>
+<p><button class="btn" onclick="connectWallet()">CONNECT WALLET</button> <a class="btn2" href="#collection">EXPLORE COLLECTION ↓</a></p>
+<p id="contractStatus" class="warn">Contract: NOT DEPLOYED YET — mint is disabled until the NexoraGacha contract is deployed. No fake mint, no fake transaction.</p>
+</section>
+<section class="glass" id="mint">
+<h2>🎁 NFT Gacha — Mystery Box</h2>
+<div class="box" id="mysteryBox"><div class="face">🎁</div></div>
+<p>Quantity: <select id="qty" onchange="updateCost()"><option>1</option><option>2</option><option>3</option><option>5</option><option>10</option></select>
+&nbsp; Price: <b id="priceLabel">0.0001 BNB</b> per NFT &nbsp; Total: <b id="totalLabel">0.0001 BNB</b> (+ gas, paid separately)</p>
+<p><button class="btn" id="mintBtn" onclick="mint()">MINT NFT</button></p>
+<p id="mintStatus" class="muted">Connect a BSC wallet first. Mint opens only when the contract is deployed and mintOpen = true.</p>
+<div id="txlog"></div>
+<div id="reveal"></div>
+</section>
+<section class="glass" id="collection">
+<h2>Collection</h2>
+<div class="stats"><div><b id="statSupply">6,666</b>Total supply</div><div><b id="statMinted">0</b>Total minted</div><div><b id="statLeft">6,666</b>Remaining</div></div>
+<p class="muted">Gallery below is a <b>deck preview</b> (token #1–#12 from the published deck), not owned tokens. Owned tokens appear only after real mints, via tokenURI/rarityOf on-chain.</p>
+<p>Filter: <select id="filter" onchange="renderGallery()"><option value="All">All rarities</option><option>Common</option><option>Uncommon</option><option>Rare</option><option>Epic</option><option>Legendary</option><option>Mythic</option></select></p>
+<div class="grid" id="gallery"></div>
+</section>
+<section class="glass">
+<h2>Rarity System</h2>
+<table><tr><th>Tier</th><th>Count</th><th>Share (rounded)</th></tr>
+<tr><td>Common</td><td>3,333</td><td>49.99% (spec 50%)</td></tr>
+<tr><td>Uncommon</td><td>1,667</td><td>25.01% (spec 25%)</td></tr>
+<tr><td>Rare</td><td>1,000</td><td>15.00% (spec 15%)</td></tr>
+<tr><td>Epic</td><td>466</td><td>6.99% (spec 7%)</td></tr>
+<tr><td>Legendary</td><td>167</td><td>2.51% (spec 2.5%)</td></tr>
+<tr><td>Mythic</td><td>33</td><td>0.49% (spec 0.5%)</td></tr></table>
+<p class="muted">Percentages cannot all be exact integers at 6,666 supply — counts above sum exactly to 6,666. Deck: seed 20261101, deckHash <code>0x83af8d3f667c1f15de0ebd7a638c51e3800253e390fd6e45ce766e04ccd2c1e9</code>, merkleRoot <code>0x79876595f077400c702d9ffd5b0c9b7ec6a14f175a8b485557f47e7e515780e2</code>. Full deck: <a href="deck-20261101.hex.txt">deck-20261101.hex.txt</a> — anyone can recompute both hashes and the counts.</p>
+</section>
+<section class="glass">
+<h2>How It Works</h2>
+<ol><li>Connect wallet (BSC Mainnet, chain 56).</li><li>Select mint quantity (max 10 per wallet, lifetime).</li><li>Confirm transaction — exactly 0.0001 BNB per NFT + gas.</li><li>Open mystery box — the box opens only after the transaction confirms on-chain.</li><li>Discover your NFT — tier comes from rarityOf(tokenId) on-chain, never from this page alone.</li></ol>
+<h3>Binance Agentic Wallet (agent mint)</h3>
+<p class="muted">Agents can mint with the same proof: read totalMinted, take the next tokenId, compute its 13-hash Merkle proof from the published deck, then call <code>mint(proof, rarity)</code> (selector <code>0x3eee5eb8</code>) with exactly currentPrice(). No Agent ID gate on this contract — any EVM wallet can mint directly.</p>
+</section>
+<section class="glass">
+<h2>Leaderboard — Top Collectors</h2>
+<p class="muted">Real on-chain data only: counted from Minted events of the deployed contract. Before deploy, this list is intentionally empty — no fake collectors.</p>
+<button class="btn2" onclick="loadLeaderboard()">Refresh leaderboard</button>
+<div id="leaderboard" class="muted">No mints yet.</div>
+</section>
+<footer>
+<span>X / Twitter: <span class="muted">handle to be announced — no fake handle</span></span>
+<span>Discord: <span class="muted">to be announced</span></span>
+<span><a href="https://www.bnbchain.org">BNB Chain</a></span>
+<span>Smart Contract: <span id="contractLink" class="muted">not deployed yet</span></span>
+<span><a href="https://github.com/encangmulyana-lang/Nexora">Documentation / Repo</a></span>
+<span><a href="admin.html">Admin Dashboard</a></span>
+</footer>
+</div>
+<script>
+const CONTRACT_ADDRESS = "";
+const RPC_URL = "https://bsc-dataseed.bnbchain.org";
+const TIERS = ["Common","Uncommon","Rare","Epic","Legendary","Mythic"];
+const EMOJI = ["⚪","🟢","🔵","🟣","🟡","🔥"];
+const ABI = ["function totalMinted() view returns (uint256)","function mintOpen() view returns (bool)","function currentPrice() view returns (uint256)","function owner() view returns (address)","function rarityOf(uint256) view returns (uint8)","function tokenURI(uint256) view returns (string)","function mintedByWallet(address) view returns (uint256)","function mint(bytes32[],uint8) payable"];
+let deck=null, provider=null, signer=null, userAddr=null, contract=null;
+function log(t){ document.getElementById('txlog').textContent += t+"\n"; }
+function updateCost(){ const q=+document.getElementById('qty').value; document.getElementById('totalLabel').textContent=(q*0.0001).toFixed(4)+" BNB"; }
+async function loadDeck(){ try{ const r=await fetch('deck-20261101.hex.txt'); const hex=(await r.text()).trim(); deck=new Uint8Array(hex.match(/../g).map(h=>parseInt(h,16))); }catch(e){ deck=null; } }
+function leaf(tokenId,tier){ return ethers.keccak256(ethers.solidityPacked(['uint256','uint8'],[tokenId,tier])); }
+function cmp(a,b){ for(let i=0;i<32;i++){ if(a[i]!==b[i]) return a[i]-b[i]; } return 0; }
+function pairHash(a,b){ const x=ethers.getBytes(a), y=ethers.getBytes(b); const [p,q]= cmp(x,y)<=0?[a,b]:[b,a]; return ethers.keccak256(ethers.concat([p,q])); }
+function proofFor(tokenId){ let lvl=[]; for(let i=1;i<=6666;i++) lvl.push(leaf(i,deck[i-1])); let idx=tokenId-1; const proof=[]; while(lvl.length>1){ const sib= idx%2===0 ? (idx+1<lvl.length?idx+1:idx) : idx-1; proof.push(lvl[sib]); const next=[]; for(let i=0;i<lvl.length;i+=2){ next.push(pairHash(lvl[i], lvl[i+1]||lvl[i])); } lvl=next; idx=Math.floor(idx/2); } return proof; }
+async function refreshStats(){ if(!CONTRACT_ADDRESS){ document.getElementById('statMinted').textContent='0'; document.getElementById('statLeft').textContent='6,666'; return; } try{ const p=new ethers.JsonRpcProvider(RPC_URL); const c=new ethers.Contract(CONTRACT_ADDRESS,ABI,p); const m=Number(await c.totalMinted()); document.getElementById('statMinted').textContent=m; document.getElementById('statLeft').textContent=(6666-m).toLocaleString(); const price=await c.currentPrice(); document.getElementById('priceLabel').textContent=ethers.formatEther(price)+' BNB'; updateCost(); const open=await c.mintOpen(); document.getElementById('mintStatus').textContent=open?'Mint is OPEN on-chain.':'Mint is CLOSED on-chain (mintOpen = false).'; document.getElementById('contractStatus').textContent='Contract: '+CONTRACT_ADDRESS; document.getElementById('contractLink').innerHTML='<a href="https://bscscan.com/address/'+CONTRACT_ADDRESS+'">'+CONTRACT_ADDRESS+'</a>'; }catch(e){ document.getElementById('mintStatus').textContent='Could not read contract: '+e.message; } }
+async function connectWallet(){ if(!window.ethereum){ alert('No EVM wallet found. Install MetaMask or Binance Wallet, then try again.'); return; } try{ provider=new ethers.BrowserProvider(window.ethereum); const acc=await provider.send('eth_requestAccounts',[]); userAddr=acc[0]; const net=await provider.getNetwork(); if(Number(net.chainId)!==56){ try{ await window.ethereum.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x38'}]}); }catch(s){ await window.ethereum.request({method:'wallet_addEthereumChain',params:[{chainId:'0x38',chainName:'BNB Smart Chain',nativeCurrency:{name:'BNB',symbol:'BNB',decimals:18},rpcUrls:[RPC_URL],blockExplorerUrls:['https://bscscan.com']}]}); } } signer=await provider.getSigner(); document.getElementById('walletInfo').textContent='Connected: '+userAddr+' (BSC 56)'; document.getElementById('connectBtn').textContent='Connected ✓'; if(CONTRACT_ADDRESS) contract=new ethers.Contract(CONTRACT_ADDRESS,ABI,signer); }catch(e){ alert('Wallet connection failed: '+e.message); } }
+async function mint(){ if(!CONTRACT_ADDRESS){ alert('Contract not deployed yet. Mint is disabled — this page will not fake a transaction.'); return; } if(!signer){ alert('Connect your wallet first.'); return; } const qty=+document.getElementById('qty').value; document.getElementById('txlog').textContent=''; for(let k=0;k<qty;k++){ try{ const readC=new ethers.Contract(CONTRACT_ADDRESS,ABI,provider); const total=Number(await readC.totalMinted()); const nextId=total+1; if(nextId>6666){ log('Sold out.'); break; } const rarity=deck[nextId-1]; const proof=proofFor(nextId); const price=await readC.currentPrice(); log('Mint '+(k+1)+'/'+qty+': token #'+nextId+' tier '+TIERS[rarity]+' — sending tx…'); const tx=await contract.mint(proof, rarity, {value: price}); log('Tx sent: https://bscscan.com/tx/'+tx.hash+' — waiting for confirmation…'); const rc=await tx.wait(); log('Confirmed in block '+rc.blockNumber+'.'); document.getElementById('mysteryBox').classList.add('open'); document.getElementById('reveal').innerHTML='<div class="card tier-'+TIERS[rarity]+'"><div class="art">'+EMOJI[rarity]+'</div><b>NEXORA #'+nextId+'</b><div>'+TIERS[rarity]+'</div><div class="muted">Tx: <a href="https://bscscan.com/tx/'+tx.hash+'">'+tx.hash.slice(0,20)+'…</a></div></div>'; await refreshStats(); }catch(e){ log('Mint failed: '+(e.reason||e.message)); break; } } }
+function renderGallery(){ if(!deck) return; const f=document.getElementById('filter').value; let html=''; for(let id=1;id<=12;id++){ const t=TIERS[deck[id-1]]; if(f!=='All'&&f!==t) continue; html+='<div class="card tier-'+t+'"><div class="art">'+EMOJI[deck[id-1]]+'</div><b>NEXORA #'+id+'</b><div>'+t+' (deck preview)</div></div>'; } document.getElementById('gallery').innerHTML=html||'<p class="muted">No cards for this filter in the preview.</p>'; }
+async function loadLeaderboard(){ if(!CONTRACT_ADDRESS){ document.getElementById('leaderboard').textContent='No mints yet — contract not deployed, leaderboard is empty by design.'; return; } try{ const p=new ethers.JsonRpcProvider(RPC_URL); const topic=ethers.id('Minted(address,uint256,uint8,uint256)'); const logs=await p.getLogs({address:CONTRACT_ADDRESS, topics:[topic], fromBlock:0}); const counts={}; logs.forEach(l=>{ const minter='0x'+l.topics[1].slice(26); counts[minter]=(counts[minter]||0)+1; }); const rows=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,10); document.getElementById('leaderboard').innerHTML= rows.length? rows.map((r,i)=> (i+1)+'. '+r[0]+' — '+r[1]+' NFT(s)').join('<br>') : 'No mints yet.'; }catch(e){ document.getElementById('leaderboard').textContent='Could not load leaderboard: '+e.message; } }
+loadDeck().then(renderGallery); refreshStats(); updateCost();
+</script></body></html>

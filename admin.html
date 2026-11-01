@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEXORA Admin Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+<style>body{margin:0;background:#050508;color:#f8fafc;font-family:system-ui,Arial,sans-serif} .wrap{max-width:900px;margin:0 auto;padding:24px 20px} .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:22px;margin:18px 0} .btn{background:linear-gradient(90deg,#9333ea,#facc15);color:#111;padding:11px 20px;border-radius:999px;border:0;cursor:pointer;font-weight:800} .btn2{border:1px solid #a855f7;background:transparent;color:#fff;padding:10px 18px;border-radius:999px;cursor:pointer} input{background:#111827;color:#fff;border:1px solid #374151;border-radius:10px;padding:10px} .muted{color:#94a3b8} #log{white-space:pre-wrap;word-break:break-all;background:#000;border-radius:12px;padding:14px;min-height:60px} a{color:#c084fc}</style>
+</head><body><div class="wrap">
+<h1>NEXORA — Admin Dashboard</h1>
+<p class="muted">Owner-only actions. The admin can NEVER change the deck, merkleRoot, deckHash, or any committed rarity — those are immutable. Non-owner transactions will revert on-chain.</p>
+<p><button class="btn" onclick="connect()">Connect Wallet</button> <a class="btn2" href="index.html">← Back to site</a></p>
+<div id="info" class="muted">Contract: NOT DEPLOYED YET. Admin controls activate after deploy + contract address is set in this page.</div>
+<div class="glass"><h2>Overview (real on-chain reads)</h2>
+<p>Total minted: <b id="minted">—</b> / 6,666 &nbsp;|&nbsp; Revenue in contract: <b id="rev">—</b> BNB &nbsp;|&nbsp; Mint open: <b id="open">—</b> &nbsp;|&nbsp; Price: <b id="price">—</b> &nbsp;|&nbsp; Owner: <b id="owner">—</b></p>
+<button class="btn2" onclick="refresh()">Refresh</button></div>
+<div class="glass"><h2>Manage mint</h2>
+<p><button class="btn2" onclick="setOpen(true)">Open mint (setMintOpen true)</button> <button class="btn2" onclick="setOpen(false)">Close mint (setMintOpen false)</button></p>
+<p>Set price (BNB, only while mint is closed): <input id="newPrice" value="0.0001"> <button class="btn2" onclick="setPrice()">Set price</button></p>
+<p>Set baseURI (IPFS, e.g. ipfs://&lt;CID&gt;/): <input id="newBase" size="40" placeholder="ipfs://.../"> <button class="btn2" onclick="setBase()">Set baseURI</button></p>
+<p><button class="btn2" onclick="withdraw()">Withdraw revenue to owner</button></p></div>
+<div class="glass"><h2>Transactions</h2>
+<p class="muted">Real Minted events from the deployed contract (empty before deploy). <button class="btn2" onclick="txs()">Refresh transactions</button></p><div id="txlist" class="muted">No transactions yet.</div></div>
+<div id="log"></div>
+</div>
+<script>
+const CONTRACT_ADDRESS = "";
+const RPC_URL = "https://bsc-dataseed.bnbchain.org";
+const ABI = ["function totalMinted() view returns (uint256)","function mintOpen() view returns (bool)","function currentPrice() view returns (uint256)","function owner() view returns (address)","function setMintOpen(bool)","function setPrice(uint256)","function setBaseURI(string)","function withdraw()"];
+let signer=null, contract=null;
+function log(t){ document.getElementById('log').textContent += t+"\n"; }
+async function connect(){ if(!window.ethereum){ alert('No EVM wallet found.'); return; } const p=new ethers.BrowserProvider(window.ethereum); await p.send('eth_requestAccounts',[]); const net=await p.getNetwork(); if(Number(net.chainId)!==56){ await window.ethereum.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x38'}]}); } signer=await p.getSigner(); if(CONTRACT_ADDRESS) contract=new ethers.Contract(CONTRACT_ADDRESS,ABI,signer); document.getElementById('info').textContent='Connected: '+await signer.getAddress()+(CONTRACT_ADDRESS?'':' — contract not deployed yet.'); refresh(); }
+async function refresh(){ if(!CONTRACT_ADDRESS) return; const p=new ethers.JsonRpcProvider(RPC_URL); const c=new ethers.Contract(CONTRACT_ADDRESS,ABI,p); document.getElementById('minted').textContent=await c.totalMinted(); document.getElementById('rev').textContent=ethers.formatEther(await p.getBalance(CONTRACT_ADDRESS)); document.getElementById('open').textContent=await c.mintOpen(); document.getElementById('price').textContent=ethers.formatEther(await c.currentPrice()); document.getElementById('owner').textContent=await c.owner(); }
+async function guard(){ if(!CONTRACT_ADDRESS){ alert('Contract not deployed yet.'); return false; } if(!signer){ alert('Connect wallet first.'); return false; } return true; }
+async function setOpen(v){ if(!await guard()) return; try{ const tx=await contract.setMintOpen(v); log('Tx: https://bscscan.com/tx/'+tx.hash); await tx.wait(); log('Done.'); refresh(); }catch(e){ log('Failed: '+(e.reason||e.message)); } }
+async function setPrice(){ if(!await guard()) return; try{ const tx=await contract.setPrice(ethers.parseEther(document.getElementById('newPrice').value)); log('Tx: https://bscscan.com/tx/'+tx.hash); await tx.wait(); log('Done.'); refresh(); }catch(e){ log('Failed: '+(e.reason||e.message)); } }
+async function setBase(){ if(!await guard()) return; try{ const tx=await contract.setBaseURI(document.getElementById('newBase').value); log('Tx: https://bscscan.com/tx/'+tx.hash); await tx.wait(); log('Done.'); }catch(e){ log('Failed: '+(e.reason||e.message)); } }
+async function withdraw(){ if(!await guard()) return; try{ const tx=await contract.withdraw(); log('Tx: https://bscscan.com/tx/'+tx.hash); await tx.wait(); log('Done.'); refresh(); }catch(e){ log('Failed: '+(e.reason||e.message)); } }
+async function txs(){ if(!CONTRACT_ADDRESS){ document.getElementById('txlist').textContent='No transactions yet.'; return; } const p=new ethers.JsonRpcProvider(RPC_URL); const topic=ethers.id('Minted(address,uint256,uint8,uint256)'); const logs=await p.getLogs({address:CONTRACT_ADDRESS, topics:[topic], fromBlock:0}); document.getElementById('txlist').innerHTML= logs.length? logs.slice(-20).reverse().map(l=> 'Tx '+l.transactionHash.slice(0,20)+'… — block '+Number(l.blockNumber)).join('<br>') : 'No transactions yet.'; }
+refresh();
+</script></body></html>
